@@ -29,7 +29,7 @@ spec:
   volumes:
   - name: sdwan-devops-workspace
     persistentVolumeClaim:
-      claimName: sdwan-devops-workspace
+      claimName: sdwan-devops-vmware
 '''
     }
   }
