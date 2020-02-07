@@ -17,8 +17,14 @@
     - assert:
         that:
           - stat_result.stat.exists
+        msg: "{{ sdwan_serial_file }} must exist.  Verify the requirements in README are met."
+      delegate_to: localhost
+      run_once: yes
+
+    - assert:
+        that:
           - vmanage_org != ""
-        msg: "'vmanage_org' must be defined and {{ sdwan_serial_file }} must exist.  Verify the requirements in README are met."
+        msg: "'vmanage_org' must be defined.  Verify the requirements in README are met."
       delegate_to: localhost
       run_once: yes
 
