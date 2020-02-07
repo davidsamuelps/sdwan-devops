@@ -1,6 +1,7 @@
 pipeline {
   agent {
     kubernetes {
+      customWorkspace '/workspace'
       yaml """
 apiVersion: v1
 kind: Pod
