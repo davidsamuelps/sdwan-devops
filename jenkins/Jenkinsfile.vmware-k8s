@@ -1,11 +1,30 @@
 pipeline {
   agent {
     kubernetes {
-      yaml """
+      customWorkspace '/workspace/sdwan-devops'
+      yaml '''
 apiVersion: v1
 kind: Pod
 spec:
+  initContainers:
+  - name: alpine
+    image: alpine:3.6
+    command:
+    - mkdir
+    - -p
+    - /workspace/sdwan-devops
+    volumeMounts:
+    - name: sdwan-devops-workspace
+      mountPath: /workspace
   containers:
+  - name: jnlp
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+    volumeMounts:
+    - mountPath: "/workspace"
+      name: sdwan-devops-workspace
+      readOnly: false
   - name: ansible
     image: jasonking/ansible-sdwan
     command:
@@ -14,12 +33,13 @@ spec:
     - 99d
     tty: true
     volumeMounts:
-    - mountPath: '/workspace'
-      name: workspace
+    - mountPath: "/workspace"
+      name: sdwan-devops-workspace
+      readOnly: false
   volumes:
-  - name: workspace
+  - name: sdwan-devops-workspace
     persistentVolumeClaim:
-      claimName: jenkins-workspace
+      claimName: sdwan-devops-vmware
 """
     }
   }
